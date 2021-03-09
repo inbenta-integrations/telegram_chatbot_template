@@ -307,7 +307,7 @@ class TelegramAPIClient
     public function getFilePathFromTelegram(string $fileId)
     {
         $filePath = "";
-        $fileInfoRaw = $this->bot('GET', "getFile?file_id=".$fileId, []);
+        $fileInfoRaw = $this->bot('GET', "getFile?file_id=" . $fileId, []);
         if (method_exists($fileInfoRaw, "getBody") && method_exists($fileInfoRaw->getBody(), "getContents")) {
             $fileInfo = json_decode($fileInfoRaw->getBody()->getContents());
             if (isset($fileInfo->result) && isset($fileInfo->result->file_path)) {
@@ -323,15 +323,16 @@ class TelegramAPIClient
      */
     public function getFileFromTelegram(string $filePath)
     {
-        $realUrl = str_replace('bot{TOKEN}', "file/bot".$this->bot_token, $this->api_url).$filePath;
+        $realUrl = str_replace('bot{TOKEN}', "file/bot" . $this->bot_token, $this->api_url) . $filePath;
 
         $file = explode("/", $filePath);
 
-        $fileName = sys_get_temp_dir(). "/" . $file[1];
+        $fileName = sys_get_temp_dir() . "/" . $file[1];
         $tmpFile = fopen($fileName, "w") or die;
         fwrite($tmpFile, file_get_contents($realUrl));
-        
-        return fopen($fileName, 'r');
-    }
+        $fileRaw = fopen($fileName, 'r');
+        @unlink($fileName);
 
+        return $fileRaw;
+    }
 }

@@ -13,10 +13,7 @@ return array(
         'guestName' => '',
         'guestContact' => '',
         'server' => '<server>',    // Your HyperChat server URL (ask your contact person at Inbenta)
-        'server_port' => 443,
-        'queue' => [
-            'active' => true
-        ]
+        'server_port' => 443
     ),
     'triesBeforeEscalation' => 0,
     'negativeRatingsBeforeEscalation' => 0

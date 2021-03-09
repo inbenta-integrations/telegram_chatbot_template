@@ -664,6 +664,9 @@ class TelegramDigester extends DigesterInterface
 
             $mediaFile = $this->getMediaFile($fileId);
             if ($mediaFile !== "") {
+                if (isset($request->caption) && trim($request->caption) !== "") {
+                    $output[] = ['message' => $request->caption];
+                }
                 $output[] = ['media' => $mediaFile];
             }
         }
@@ -673,8 +676,7 @@ class TelegramDigester extends DigesterInterface
     /**
      * Get the media file from the Telegram response, 
      * save file into temporal directory to sent to Hyperchat
-     * @param string $filePreData
-     * @param string $mediaContent
+     * @param string $fileId
      */
     protected function getMediaFile(string $fileId)
     {
@@ -683,7 +685,7 @@ class TelegramDigester extends DigesterInterface
             $formatTmp = explode(".", $filePath);
             if (count($formatTmp) > 0) {
                 $fileFormat = $formatTmp[count($formatTmp) - 1];
-                foreach ($this->attachableFormats as $type => $formats) {
+                foreach ($this->attachableFormats as $formats) {
                     if (in_array($fileFormat, $formats)) {
                         return $this->externalClient->getFileFromTelegram($filePath);
                     }
