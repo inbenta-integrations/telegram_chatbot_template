@@ -9,6 +9,10 @@ use Psr\Http\Message\ResponseInterface;
 class TelegramAPIClient
 {
 
+    public $email;
+    public $fullName;
+    public $extraInfo;
+
     /**
      * Telegram API URL.
      *
@@ -236,7 +240,25 @@ class TelegramAPIClient
      */
     public function getFullName()
     {
-        return $this->getSender('first_name') . " " . $this->getSender('last_name');
+        return $this->fullName;
+    }
+
+    /**
+     *   Returns the user email or a default email made with the external ID
+     *   @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     *   Returns the extra info data
+     *   @return Array
+     */
+    public function getExtraInfo()
+    {
+        return $this->extraInfo;
     }
 
     /**
@@ -260,6 +282,39 @@ class TelegramAPIClient
         return null;
     }
 
+    /**
+     * Set full name attribute
+     *
+     * @param String $fullName
+     * @return void
+     */
+    public function setFullName($fullName)
+    {
+        $this->fullName = $fullName;
+    }
+
+    /**
+     * Set extra info attributes
+     *
+     * @param Array $extraInfo
+     * @return void
+     */
+    public function setExtraInfo($extraInfo)
+    {
+        $this->extraInfo = $extraInfo;
+    }
+
+    /**
+     * Set email attribute
+     *
+     * @param String $email
+     * @return void
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
     public static function buildExternalIdFromRequest()
     {
         $request = json_decode(file_get_contents('php://input'), true);
@@ -274,12 +329,6 @@ class TelegramAPIClient
             return "tg-" . $data['message']['chat']['id'];
         }
         return null;
-    }
-
-
-    public function getEmail()
-    {
-        return $this->getExternalId() . "@telegram.com";
     }
 
     /**

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "caa24050eb42981934cf44328a372cf5",
+    "content-hash": "856b790a574e0f7b7f47b1bdcf380125",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -132,16 +132,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.7.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3"
+                "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/53330f47520498c0ae1f61f7e2c90f55690c06a3",
-                "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/35ea11d335fd638b5882ff1725228b3d35496ab1",
+                "reference": "35ea11d335fd638b5882ff1725228b3d35496ab1",
                 "shasum": ""
             },
             "require": {
@@ -201,22 +201,22 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/1.7.0"
+                "source": "https://github.com/guzzle/psr7/tree/1.8.1"
             },
-            "time": "2020-09-30T07:37:11+00:00"
+            "time": "2021-03-21T16:25:00+00:00"
         },
         {
             "name": "inbenta/chatbot-api-connector",
-            "version": "v1.3.8",
+            "version": "v1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inbenta-integrations/chatbot_api_connector.git",
-                "reference": "7535ec6d28211ecbef4eb7b5b48640083d076980"
+                "reference": "84086fc0b9bf1a3eb4b1f3e235edaf1e478ce6e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inbenta-integrations/chatbot_api_connector/zipball/7535ec6d28211ecbef4eb7b5b48640083d076980",
-                "reference": "7535ec6d28211ecbef4eb7b5b48640083d076980",
+                "url": "https://api.github.com/repos/inbenta-integrations/chatbot_api_connector/zipball/84086fc0b9bf1a3eb4b1f3e235edaf1e478ce6e1",
+                "reference": "84086fc0b9bf1a3eb4b1f3e235edaf1e478ce6e1",
                 "shasum": ""
             },
             "require": {
@@ -231,10 +231,10 @@
                 }
             },
             "support": {
-                "source": "https://github.com/inbenta-integrations/chatbot_api_connector/tree/v1.3.8",
+                "source": "https://github.com/inbenta-integrations/chatbot_api_connector/tree/v1.3.10",
                 "issues": "https://github.com/inbenta-integrations/chatbot_api_connector/issues"
             },
-            "time": "2021-03-05T19:28:59+00:00"
+            "time": "2021-03-29T17:30:18+00:00"
         },
         {
             "name": "psr/http-message",
