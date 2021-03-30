@@ -14,7 +14,7 @@ return array(
     'queue_estimation_first' => 'Hay una persona delante de ti.',
     'queue_estimation' => 'Hay $queuePosition personas delante de ti.',
     'rate_content_intro' => '¿Te ha servido esta respuesta?',
-    'thanks' => 'Gracias!',
+    'thanks' => '¡Gracias!',
     'yes' => 'Sí',
     'date_format' => 'formato de fecha: mm/dd/YYYY',
     'link' => 'Enlace'

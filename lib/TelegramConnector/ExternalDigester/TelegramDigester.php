@@ -451,7 +451,7 @@ class TelegramDigester extends DigesterInterface
         $parts = preg_split('/<\s*iframe.*?src\s*=\s*"(.+?)".*?\s*\/?>/', $messageTxt, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         $elements = [];
         for ($i = 0; $i < count($parts); $i++) {
-            if (strpos($parts[$i], "</iframe>") > 0) {
+            if (strpos($parts[$i], "</iframe>") !== false) {
                 continue;
             }
             if (substr($parts[$i], 0, 4) == 'http') {
@@ -468,10 +468,7 @@ class TelegramDigester extends DigesterInterface
                     }
                 }
                 if (!$hasMedia) {
-                    $pos1 = strpos($messageTxt, "<iframe");
-                    $pos2 = strpos($messageTxt, "</iframe>", $pos1);
-                    $iframe = substr($messageTxt, $pos1, $pos2 - $pos1 + 9);
-                    $elements[]["text"] = str_replace($iframe, "<a href='" . $parts[$i] . "'>" . $this->langManager->translate("link") . "</a>", $messageTxt);
+                    $elements[]["text"] = "<a href='" . $parts[$i] . "'>" . $this->langManager->translate("link") . "</a>";
                 }
             } else {
                 $elements[]["text"] = $parts[$i];

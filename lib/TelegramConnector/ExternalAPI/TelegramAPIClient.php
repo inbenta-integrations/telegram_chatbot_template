@@ -139,6 +139,7 @@ class TelegramAPIClient
             default:
                 $endpoint = 'sendMessage';
                 $message['parse_mode'] = 'HTML';
+                $message['disable_web_page_preview'] = true; //Disable the preview of the links
                 break;
         }
         if ($type === 'text' && isset($message['text']) && trim($message['text']) === '') {
