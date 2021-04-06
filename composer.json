@@ -4,7 +4,7 @@
         "url": "git@github.com:inbenta-integrations/chatbot_api_connector.git"
     }],
     "require": {
-        "inbenta/chatbot-api-connector": "1.3.10",
+        "inbenta/chatbot-api-connector": "1.3.12",
         "php": "~7.3"
     },
     "autoload": {
