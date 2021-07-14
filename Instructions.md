@@ -74,7 +74,13 @@ Here you have the current labels with their English value:
 
 ### **HyperChat integration (optional)**
 
-If you use HyperChat you must subscribe your UI to the Hyperchat events. Open your _Messenger_ instance. Go to Messenger → Settings → HyperChat → Webhooks. Here, in the ‘Events’ column type “queues:update,invitations:new,invitations:accept,forever:alone,chats:close, messages:new,users:activity”. In the ‘Target’ column paste your UI’s URL, then click on the ‘+’ button on the right.
+If you use HyperChat you must subscribe your UI to the Hyperchat events. Open your _Messenger_ instance. Go to Messenger → Settings → HyperChat → Webhooks. 
+
+Here, in the ‘Events’ column type “queues:update,invitations:new,invitations:accept,forever:alone,chats:close, messages:new,users:activity”. In the ‘Target’ column paste your UI’s URL, then click on the ‘+’ button on the right.
+
+Make sure to select the accepted files for **file sharing** (allowed both end-users and agents). Go to Messenger → Settings → HyperChat → Conversation, and add one of the following (if is not in the list): jpeg, png, pdf, xls, xlsx, doc, docx, mp4, avi, mp3, aac, wav, wma, ogg, m4a, gif, oga.
+
+> Voice format for Telegram is **OGG audio** (.oga), make sure is selected if you want to use it in the escalation.
 
 ## **Building the Telegram Connector**
 

@@ -17,5 +17,11 @@ return array(
     'thanks' => 'Grazie!',
     'yes' => 'Sì',
     'date_format' => 'formato data: mm/dd/YYYY',
-    'link' => 'Collegamento'
+    'link' => 'Collegamento',
+    'ticket_response_intro' => "Ciao, sono l'agente con cui hai parlato poco fa. La mia risposta alla tua domanda",
+    'ticket_response_info' => "Questo è il numero del ticket",
+    'ticket_response_end' => "Ora puoi continuare a chattare con il Chatbot. Se vuoi parlare con qualcuno, scrivi 'agente'. Grazie!",
+    'unable_to_process_file' => "Non sono ancora in grado di elaborare i file multimediali. Per favore fammi una domanda.",
+    'invalid_file' => "Formato file non supportato. Prova a convertirlo in un altro formato prima di inviarlo di nuovo.",
+    'user_send_no_valid_file' => "L'utente ha provato a inviare un file con un formato non supportato."
 );

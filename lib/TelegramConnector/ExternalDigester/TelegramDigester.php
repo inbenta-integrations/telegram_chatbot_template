@@ -17,17 +17,23 @@ class TelegramDigester extends DigesterInterface
     protected $externalMessageTypes = [
         'text',
         'callbackQuery',
-        'photo',
         'attachment',
-        'sticker'
+        'sticker',
+        'photo',
+        'document',
+        'video',
+        'audio',
+        'animation',
+        'voice'
     ];
 
     protected $attachableFormats = [
-        'photo' => ['jpg', 'jpeg', 'png'],
+        'photo' => ['jpg', 'jpeg', 'png', 'gif'],
         'document' => ['pdf', 'xls', 'xlsx', 'doc', 'docx'],
         'video' => ['mp4', 'avi'],
         'audio' => ['mp3', 'aac', 'wav', 'wma', 'ogg', 'm4a'],
-        'animation' => ['gif']
+        'animation' => ['gif'],
+        'voice' => ['oga']
     ];
 
     public function __construct($langManager, $conf, $session, $externalClient)
@@ -74,8 +80,8 @@ class TelegramDigester extends DigesterInterface
 
         $output = [];
         if (isset($request->message->text)) {
-            if ($request->message->text === "/start") {
-                $output[] = ['directCall' => "sys-welcome"]; //Start commmand, welcome message from bot
+            if ($request->message->text === '/start') {
+                $output[] = ['directCall' => 'sys-welcome']; //Start commmand, welcome message from bot
             } else if ($this->session->has('escalationOptionsMap')) {
                 $options = $this->session->get('escalationOptionsMap');
                 $this->session->delete('escalationOptionsMap');
@@ -86,7 +92,7 @@ class TelegramDigester extends DigesterInterface
             }
         } else if (
             isset($request->message->photo) || isset($request->message->animation) || isset($request->message->document)
-            || isset($request->message->video) || isset($request->message->audio)
+            || isset($request->message->voice) || isset($request->message->video) || isset($request->message->audio)
         ) {
             $output = $this->mediaFileToHyperchat($request->message);
         }
@@ -94,16 +100,20 @@ class TelegramDigester extends DigesterInterface
             $messages = [$request];
             foreach ($messages as $msg) {
                 $msgType = $this->checkExternalMessageType($msg);
-                $digester = 'digestFromTelegram' . ucfirst($msgType);
+                if (!array_key_exists($msgType, $this->attachableFormats)) {
+                    $digester = 'digestFromTelegram' . ucfirst($msgType);
 
-                //Check if there are more than one responses from one incoming message
-                $digestedMessage = $this->$digester($msg);
-                if (isset($digestedMessage['multiple_output'])) {
-                    foreach ($digestedMessage['multiple_output'] as $message) {
-                        $output[] = $message;
+                    //Check if there are more than one responses from one incoming message
+                    $digestedMessage = $this->$digester($msg);
+                    if (isset($digestedMessage['multiple_output'])) {
+                        foreach ($digestedMessage['multiple_output'] as $message) {
+                            $output[] = $message;
+                        }
+                    } else {
+                        $output[] = $digestedMessage;
                     }
                 } else {
-                    $output[] = $digestedMessage;
+                    $this->externalClient->sendMessage(['text' => $this->langManager->translate('unable_to_process_file')]);
                 }
             }
         }
@@ -203,6 +213,31 @@ class TelegramDigester extends DigesterInterface
     protected function isTelegramPhoto($message)
     {
         return isset($message->message) && isset($message->message->photo);
+    }
+
+    protected function isTelegramDocument($message)
+    {
+        return isset($message->message) && isset($message->message->document);
+    }
+
+    protected function isTelegramVideo($message)
+    {
+        return isset($message->message) && isset($message->message->video);
+    }
+
+    protected function isTelegramAudio($message)
+    {
+        return isset($message->message) && isset($message->message->audio);
+    }
+
+    protected function isTelegramAnimation($message)
+    {
+        return isset($message->message) && isset($message->message->animation);
+    }
+
+    protected function isTelegramVoice($message)
+    {
+        return isset($message->message) && isset($message->message->voice);
     }
 
     /********************** API MESSAGE TYPE CHECKERS **********************/
@@ -373,20 +408,21 @@ class TelegramDigester extends DigesterInterface
 
     protected function digestFromApiMultipleChoiceQuestion($message, $lastUserQuestion)
     {
-        $isDirectCall = true;
         $buttonOptions = [];
         foreach ($message->options as $option) {
-            $buttonOptions[] = ['text' => $option->label];
-
-            if (!isset($option->revisitableLink) || !$option->revisitableLink) {
-                $isDirectCall = false;
-                $payload = $option->value;
-            } else {
-                $payload  = $option->revisitableLink;
+            $payload = ['option' => $option->value];
+            if (isset($option->revisitableLink) && isset($option->attributes->DIRECT_CALL) && $option->attributes->DIRECT_CALL !== '') {
+                $payload = ['directCall' => $option->attributes->DIRECT_CALL];
+                if (mb_strlen(json_encode($payload), 'UTF-8') > 64) {
+                    $payload = ['option' => $option->value];
+                }
             }
+            $buttonOptions[] = [
+                'text' => $option->label,
+                'payload' => $payload
+            ];
         }
-        $response = ReplyKeyboardMessage::build($message->message, $buttonOptions);
-
+        $response = InlineKeyboardMessage::build($message->message, $buttonOptions);
         return $response;
     }
 
@@ -558,7 +594,7 @@ class TelegramDigester extends DigesterInterface
             if ($message->actionField->fieldType === 'list') {
                 $output = $this->handleMessageWithListValues($message->message, $message->actionField->listValues);
             } elseif ($message->actionField->fieldType === 'datePicker') {
-                $output['text'] = strip_tags($message->message . " (date format: mm/dd/YYYY)");
+                $output['text'] = strip_tags($message->message . " (" . $this->langManager->translate('date_format') . ")");
             }
         }
         return $output;
@@ -655,6 +691,8 @@ class TelegramDigester extends DigesterInterface
                 $fileId = $request->video->file_id;
             } else if (isset($request->audio)) {
                 $fileId = $request->audio->file_id;
+            } else if (isset($request->voice)) {
+                $fileId = $request->voice->file_id;
             } else {
                 return $output; //No file type found, return empty array
             }
@@ -665,7 +703,14 @@ class TelegramDigester extends DigesterInterface
                     $output[] = ['message' => $request->caption];
                 }
                 $output[] = ['media' => $mediaFile];
+            } else {
+                if (isset($request->caption) && trim($request->caption) !== "") {
+                    $output[] = ['message' => $request->caption];
+                }
+                $output[] = ['message' => '('.$this->langManager->translate('user_send_no_valid_file').')'];
+                $this->externalClient->sendMessage(['text' => '<i>' . $this->langManager->translate('invalid_file') . '</i>']);
             }
+
         }
         return $output;
     }

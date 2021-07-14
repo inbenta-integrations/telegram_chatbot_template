@@ -17,5 +17,11 @@ return array(
     'thanks' => '¡Gracias!',
     'yes' => 'Sí',
     'date_format' => 'formato de fecha: mm/dd/YYYY',
-    'link' => 'Enlace'
+    'link' => 'Enlace',
+    'ticket_response_intro' => "Hola, soy el agente con el que hablaste hace un momento. Mi respuesta a tu pregunta",
+    'ticket_response_info' => "Este es el número del ticket",
+    'ticket_response_end' => "Ahora puedes continuar charlando con el Chatbot. Si deseas hablar con alguien, escribe 'agente'. ¡Gracias!",
+    'unable_to_process_file' => "Aún no soy capaz de procesar ficheros multimedia. Por favor, hazme una pregunta.",
+    'invalid_file' => "Formato del fichero no admitido. Intente convertirlo a otro formato antes de volver a enviarlo.",
+    'user_send_no_valid_file' => "El usuario ha intentado enviar un fichero con un formato no admitido."
 );
